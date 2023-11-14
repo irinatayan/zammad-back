@@ -1,0 +1,19 @@
+{
+    "name": "tayan/custom-router",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Irina Tayanovskaya",
+            "email": "irina.tayanovskaya@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-PDO": "^8.2",
+        "zammad/zammad-api-client-php": "2.0.*"
+    }
+}
