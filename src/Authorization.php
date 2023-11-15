@@ -36,6 +36,8 @@ class Authorization
      */
     public function register(array $params = []): bool
     {
+        $params = json_decode(file_get_contents('php://input'), true);
+
         if (empty($params['username'])) {
             throw new AuthorizationException('The username should not be empty');
         }
@@ -45,7 +47,7 @@ class Authorization
         if (empty($params['password'])) {
             throw new AuthorizationException('The password should not be empty');
         }
-        if ($params['password'] !== $params['confirm_password']) {
+        if ($params['password'] !== $params['passwordConfirm']) {
             throw new AuthorizationException('The Password and Confirm Password should match');
         }
 
