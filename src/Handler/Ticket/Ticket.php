@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Handler\Ticket;
 
+use App\Database;
+use App\Model\TicketUser;
 use App\Request;
 use App\Response;
 use App\ZammadClient;
+use App\Model\User;
 use ZammadAPIClient\ResourceType;
 
 class Ticket
@@ -15,23 +18,51 @@ class Ticket
     {
         $params = $request->getParams();
         $client = (new ZammadClient())->getClient();
-        $ticket = $client->resource(ResourceType::TICKET)->get($params['id']);
 
-        $articles = $ticket->getTicketArticles();
+        $config = include_once __DIR__ . '/../../../config/database.php';
+        $connection = (new Database($config['dsn'], $config['username'], $config['password']))->getConnection();
 
-        $ticketOrNull = !empty($ticket->getValues()) ? $ticket->getValues() : null;
+        $ticket = $this->getTicket($client, $params['id']);
+
+        $articles = $this->getTicketArticles($client, $params['id']);
+
+        $agents = (new User($connection))->getUsersByRole('user');
+
+        $owner = (new TicketUser($connection))->getOwnerIdByTicketId($ticket['id']);
+
+
+
+        $data = [
+            "ticket" => $ticket,
+            "articles" => $articles,
+            "agents" => $agents,
+            "owner" => $owner
+        ];
+        (new Response())->success($data)->send();
+
+    }
+
+    private function getTicket($client, $ticketId): ?array
+    {
+        $ticket = $client->resource(ResourceType::TICKET)->get($ticketId);
+
+        return !empty($ticket->getValues()) ? $ticket->getValues() : null;
+    }
+
+    private function getTicketArticles($client, $ticketId): array
+    {
+        $articles = $client->resource(ResourceType::TICKET_ARTICLE)->getForTicket($ticketId);
 
         $articlesArr = [];
+
         foreach ($articles as $article) {
             $articlesArr[] = $article->getValues();
         }
+        return $articlesArr;
+    }
 
-        $data = [
-            "ticket" => $ticketOrNull,
-            "articles" => $articlesArr
-
-        ];
-        (new Response())->success($data)->send();
+    private function allAgents()
+    {
 
     }
 }
