@@ -16,19 +16,20 @@ use App\Router;
 
 $router = new Router();
 
-$router->get('/user/create', callback: UserCreate::class);
-$router->post('/user/login', callback: UserLogin::class);
-$router->options('/user/login', callback: OptionsHeaders::class);
-$router->post('/user/current', callback: CurrentUser::class);
-$router->options('/user/current', callback: OptionsHeaders::class);
-$router->post('/user/logout', callback: Logout::class);
-$router->options('/user/logout', callback: OptionsHeaders::class);
-$router->get('/tickets', callback: Tickets::class);
-$router->options('/tickets', callback: OptionsHeaders::class);
-$router->get('/ticket', callback: Ticket::class);
-$router->options('/ticket', callback: OptionsHeaders::class);
-$router->get('/search/ticket', callback: TicketSearch::class);
-$router->options('/search/ticket', callback: OptionsHeaders::class);
+$router->post('/backend/user/create', callback: UserCreate::class);
+$router->options('/backend/user/create', callback: OptionsHeaders::class);
+$router->post('/backend/user/login', callback: UserLogin::class);
+$router->options('/backend/user/login', callback: OptionsHeaders::class);
+$router->post('/backend/user/current', callback: CurrentUser::class);
+$router->options('/backend/user/current', callback: OptionsHeaders::class);
+$router->post('/backend/user/logout', callback: Logout::class);
+$router->options('/backend/user/logout', callback: OptionsHeaders::class);
+$router->get('/backend/tickets', callback: Tickets::class);
+$router->options('/backend/tickets', callback: OptionsHeaders::class);
+$router->get('/backend/ticket', callback: Ticket::class);
+$router->options('/backend/ticket', callback: OptionsHeaders::class);
+$router->get('/backend/search/ticket', callback: TicketSearch::class);
+$router->options('/backend/search/ticket', callback: OptionsHeaders::class);
 
 
 

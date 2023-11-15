@@ -18,7 +18,7 @@ class Login
         $params = $request->getParams();
 
         $session = new Session();
-        $config = include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
+        $config = include_once __DIR__ . '/../../../config/database.php';
         $database = new Database($config['dsn'], $config['username'], $config['password']);
         $authorization = new Authorization($database, $session);
 
