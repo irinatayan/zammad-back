@@ -14,7 +14,6 @@ class Users
     public function __invoke(Request $request, Response $response): void
     {
             $users = $this->getAgents();
-            $test = 20;
     }
 
     public function getAgents()

@@ -9,6 +9,8 @@ class Router
     private const GET = 'GET';
     private const POST = 'POST';
     private const OPTIONS = 'OPTIONS';
+    private const PATCH = 'PATCH';
+
     private array $routes = [];
 
     /**
@@ -42,6 +44,19 @@ class Router
             'path' => $route,
             'callback' => $callback,
             'method' => self::POST,
+        ];
+    }
+
+    /**
+     * @param string $route
+     * @param callable|string $callback
+     */
+    public function patch(string $route, callable|string $callback): void
+    {
+        $this->routes[] = [
+            'path' => $route,
+            'callback' => $callback,
+            'method' => self::PATCH,
         ];
     }
 

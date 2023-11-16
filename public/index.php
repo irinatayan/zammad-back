@@ -8,6 +8,7 @@ use App\Handler\OptionsHeaders;
 use App\Handler\Ticket\Ticket;
 use App\Handler\Ticket\Tickets;
 use App\Handler\Ticket\TicketSearch;
+use App\Handler\Ticket\Update as TicketUpdate;
 use App\Handler\User\Create as UserCreate;
 use App\Handler\User\Login as UserLogin;
 use App\Handler\User\CurrentUser;
@@ -30,6 +31,8 @@ $router->get('/backend/ticket', callback: Ticket::class);
 $router->options('/backend/ticket', callback: OptionsHeaders::class);
 $router->get('/backend/search/ticket', callback: TicketSearch::class);
 $router->options('/backend/search/ticket', callback: OptionsHeaders::class);
+$router->post('/backend/ticket', callback: TicketUpdate::class);
+$router->options('/backend/ticket', callback: OptionsHeaders::class);
 
 
 

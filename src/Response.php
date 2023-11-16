@@ -54,5 +54,6 @@ class Response
         }
 
         echo $this->body;
+        exit();
     }
 }
