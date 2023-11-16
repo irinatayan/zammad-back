@@ -14,6 +14,7 @@ use App\Handler\User\Login as UserLogin;
 use App\Handler\User\CurrentUser;
 use App\Handler\User\Logout;
 use App\Router;
+use App\Handler\Ticket\TicketPriority;
 
 $router = new Router();
 
@@ -33,6 +34,8 @@ $router->get('/backend/search/ticket', callback: TicketSearch::class);
 $router->options('/backend/search/ticket', callback: OptionsHeaders::class);
 $router->post('/backend/ticket', callback: TicketUpdate::class);
 $router->options('/backend/ticket', callback: OptionsHeaders::class);
+$router->post('/backend/ticket/priority', callback: TicketPriority::class);
+$router->options('/backend/ticket/priority', callback: OptionsHeaders::class);
 
 
 
