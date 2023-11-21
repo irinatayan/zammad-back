@@ -11,8 +11,10 @@ use App\Handler\Ticket\TicketSearch;
 use App\Handler\Ticket\Update as TicketUpdate;
 use App\Handler\User\Create as UserCreate;
 use App\Handler\User\Login as UserLogin;
+use App\Handler\User\Update as UserUpdate;
 use App\Handler\User\CurrentUser;
 use App\Handler\User\Logout;
+use App\Handler\User\Users;
 use App\Router;
 use App\Handler\Ticket\TicketPriority;
 
@@ -20,12 +22,20 @@ $router = new Router();
 
 $router->post('/backend/user/create', callback: UserCreate::class);
 $router->options('/backend/user/create', callback: OptionsHeaders::class);
+
+$router->post('/backend/user/update', callback: UserUpdate::class);
+$router->options('/backend/user/update', callback: OptionsHeaders::class);
+
 $router->post('/backend/user/login', callback: UserLogin::class);
 $router->options('/backend/user/login', callback: OptionsHeaders::class);
 $router->post('/backend/user/current', callback: CurrentUser::class);
 $router->options('/backend/user/current', callback: OptionsHeaders::class);
 $router->post('/backend/user/logout', callback: Logout::class);
 $router->options('/backend/user/logout', callback: OptionsHeaders::class);
+$router->get('/backend/users', callback: Users::class);
+$router->options('/backend/users', callback: OptionsHeaders::class);
+
+
 $router->get('/backend/tickets', callback: Tickets::class);
 $router->options('/backend/tickets', callback: OptionsHeaders::class);
 $router->get('/backend/ticket', callback: Ticket::class);

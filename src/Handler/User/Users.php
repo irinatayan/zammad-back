@@ -13,7 +13,9 @@ class Users
 {
     public function __invoke(Request $request, Response $response): void
     {
-            $users = $this->getAgents();
+        $users = $this->getAgents();
+        (new Response())->success($users)->send();
+
     }
 
     public function getAgents()
@@ -24,15 +26,15 @@ class Users
 
             $role = 'user';
 
-            $statement = $database->getConnection()->prepare('SELECT * FROM user WHERE role = :role');
-            $statement->execute([
-                'email' => $role,
-            ]);
+            $statement = $database->getConnection()->prepare('SELECT id, username, email, role FROM user');
+            $statement->execute();
 
-            return $statement->fetch();
+            return $statement->fetchAll();
 
-        } catch (PDOException $e) {
-            echo "Ошибка: " . $e->getMessage();
+        } catch (\Exception $e) {
+            (new Response())->error(message: $e->getMessage(), statusCode: 500)->send();
+        } catch (\Error $e) {
+            (new Response())->error(message: $e->getMessage(), statusCode: 500)->send();
         }
 
     }
