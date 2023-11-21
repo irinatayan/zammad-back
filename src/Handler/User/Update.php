@@ -13,13 +13,6 @@ class Update
 {
     public function __invoke(Request $request, Response $response): void
     {
-        $users = $this->getAgents();
-        (new Response())->success("data")->send();
-
-    }
-
-    public function getAgents()
-    {
         try {
             $config = include_once __DIR__ . '/../../../config/database.php';
             $database = new Database($config['dsn'], $config['username'], $config['password']);
@@ -54,7 +47,7 @@ class Update
 
                 $updateStmt->execute();
 
-                echo "Данные пользователя успешно обновлены.";
+                (new Response())->success(message: 'User successfully created')->send();
             }
 
         } catch (\Exception $e) {
