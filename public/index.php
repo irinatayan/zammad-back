@@ -9,6 +9,7 @@ use App\Handler\Ticket\Ticket;
 use App\Handler\Ticket\Tickets;
 use App\Handler\Ticket\TicketSearch;
 use App\Handler\Ticket\Update as TicketUpdate;
+use App\Handler\Ticket\TicketState;
 use App\Handler\User\Create as UserCreate;
 use App\Handler\User\Login as UserLogin;
 use App\Handler\User\Update as UserUpdate;
@@ -50,6 +51,8 @@ $router->post('/backend/ticket', callback: TicketUpdate::class);
 $router->options('/backend/ticket', callback: OptionsHeaders::class);
 $router->post('/backend/ticket/priority', callback: TicketPriority::class);
 $router->options('/backend/ticket/priority', callback: OptionsHeaders::class);
+$router->post('/backend/ticket/state', callback: TicketState::class);
+$router->options('/backend/ticket/state', callback: OptionsHeaders::class);
 
 
 

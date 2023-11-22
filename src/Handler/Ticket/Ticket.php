@@ -30,13 +30,16 @@ class Ticket
 
         $owner = (new TicketUser($connection))->getOwnerIdByTicketId($ticket['id']);
 
+        $states = $this->getStates($client);
+
 
 
         $data = [
             "ticket" => $ticket,
             "articles" => $articles,
             "agents" => $agents,
-            "owner" => $owner
+            "owner" => $owner,
+            "states" => $states
         ];
         (new Response())->success($data)->send();
 
@@ -61,8 +64,20 @@ class Ticket
         return $articlesArr;
     }
 
-    private function allAgents()
+    private function getStates($client): ?array
     {
+        $states = $client->resource(ResourceType::TICKET_STATE)->all();
 
+        $stateArr = [];
+
+        foreach ($states as $state) {
+            $stateValues = $state->getValues();
+            ['id' => $id, 'name' => $name] = $stateValues;
+
+            if ($name === "closed" || $name === "open" || $name === "pending reminder") {
+                $stateArr[] = $stateValues;
+            }
+        }
+        return $stateArr;
     }
 }
