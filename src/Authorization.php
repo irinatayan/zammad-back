@@ -38,22 +38,19 @@ class Authorization
     {
         $params = json_decode(file_get_contents('php://input'), true);
 
-        if (empty($params['username'])) {
+        if (empty($params['user']['username'])) {
             throw new AuthorizationException('The username should not be empty');
         }
-        if (empty($params['email'])) {
+        if (empty($params['user']['email'])) {
             throw new AuthorizationException('The email should not be empty');
         }
-        if (empty($params['password'])) {
+        if (empty($params['user']['password'])) {
             throw new AuthorizationException('The password should not be empty');
-        }
-        if ($params['password'] !== $params['passwordConfirm']) {
-            throw new AuthorizationException('The Password and Confirm Password should match');
         }
 
         $statement = $this->database->getConnection()->prepare('SELECT * FROM user WHERE email = :email');
         $statement->execute([
-            'email' => $params['email'],
+            'email' => $params['user']['email'],
         ]);
 
         $user = $statement->fetch();
@@ -63,7 +60,7 @@ class Authorization
 
         $statement = $this->database->getConnection()->prepare('SELECT * FROM user WHERE username = :username');
         $statement->execute([
-            'username' => $params['username'],
+            'username' => $params['user']['username'],
         ]);
 
         $user = $statement->fetch();
@@ -73,16 +70,16 @@ class Authorization
 
         try {
             $statement = $this->database->getConnection()->prepare('INSERT INTO user (email, username, password, role) VALUES (:email, :username, :password, :role)');
-            $hashedPassword = password_hash($params['password'], PASSWORD_BCRYPT);
+            $hashedPassword = password_hash($params['user']['password'], PASSWORD_BCRYPT);
 
             $statement->execute([
-                'email' => $params['email'],
-                'username' => $params['username'],
+                'email' => $params['user']['email'],
+                'username' => $params['user']['username'],
                 'password' => $hashedPassword,
                 'role' => 'user',
             ]);
         } catch (PDOException $e) {
-            echo 'Ошибка при выполнении запроса: ' . $e->getMessage();
+            echo 'Error: ' . $e->getMessage();
         }
         return true;
     }
