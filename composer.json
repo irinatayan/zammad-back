@@ -14,6 +14,7 @@
     ],
     "require": {
         "ext-PDO": "^8.2",
-        "zammad/zammad-api-client-php": "2.0.*"
+        "zammad/zammad-api-client-php": "2.0.*",
+        "nesbot/carbon": "^2.71"
     }
 }
