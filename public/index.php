@@ -5,8 +5,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Handler\OptionsHeaders;
+use App\Handler\Ticket\StatesPrioritiesAgents;
 use App\Handler\Ticket\Ticket;
 use App\Handler\Ticket\Tickets;
+use App\Handler\Ticket\UpdateTicketsOwner;
 use App\Handler\Ticket\TicketSearch;
 use App\Handler\Ticket\Update as TicketUpdate;
 use App\Handler\Ticket\TicketState;
@@ -53,6 +55,11 @@ $router->post('/backend/ticket/priority', callback: TicketPriority::class);
 $router->options('/backend/ticket/priority', callback: OptionsHeaders::class);
 $router->post('/backend/ticket/state', callback: TicketState::class);
 $router->options('/backend/ticket/state', callback: OptionsHeaders::class);
+$router->get('/backend/ticket/bulk-update-info', callback: StatesPrioritiesAgents::class);
+$router->options('/backend/ticket/bulk-update-info', callback: OptionsHeaders::class);
+
+$router->post('/backend/tickets/update/owner', callback: UpdateTicketsOwner::class);
+$router->options('/backend/tickets/update/owner', callback: OptionsHeaders::class);
 
 
 

@@ -11,6 +11,7 @@ class OptionsHeaders
 {
     public function __invoke(Request $request, Response $response): void
     {
+        header('Vary: Origin');
         (new Response())->success([])->send();
     }
 }
