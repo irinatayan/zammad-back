@@ -27,6 +27,22 @@ class TicketUser {
 
     }
 
+    public function getTicketById($ticketId)
+    {
+        try {
+            $sql = "SELECT * FROM ticket_user WHERE ticket_id = :ticket_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':ticket_id', $ticketId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: null;
+
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+
+    }
+
     public function getOwnerIdByTicketId($ticket_id): ?array
     {
         try {
@@ -40,5 +56,8 @@ class TicketUser {
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
+    }
+    public function createOrUpdate($ticketId, $agentId) {
+
     }
 }
