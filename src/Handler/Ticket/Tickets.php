@@ -5,6 +5,7 @@
 namespace App\Handler\Ticket;
 
 use App\Database;
+use App\Model\TicketUser;
 use App\Request;
 use App\Response;
 use App\ZammadClient;
@@ -48,21 +49,11 @@ class Tickets
             $tickets = $data['assets']['Ticket'];
             $users = $data['assets']['User'];
 
+
             $ticketIds = array_keys($tickets);
-            $ticketIdsString = implode(',', $ticketIds);
-            $placeholders = implode(',', array_fill(0, count($ticketIds), '?'));
 
-            $sql = "SELECT tu.ticket_id, u.username
-                FROM ticket_user tu
-                JOIN user u ON tu.user_id = u.id
-                WHERE tu.ticket_id IN ($ticketIdsString)";
-
-            $ticketIdsWithUsername = $connection->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-            $indexedTicketIdsWithUsername = [];
-            foreach ($ticketIdsWithUsername as $row) {
-                $indexedTicketIdsWithUsername[$row['ticket_id']] = $row;
-            }
-
+            $userTicket = new TicketUser($connection);
+            $indexedTicketIdsWithUsername = $userTicket->getTicketsUsername($ticketIds);
 
             $tickets_with_users_info = [];
             foreach ($tickets as $key => $ticket) {

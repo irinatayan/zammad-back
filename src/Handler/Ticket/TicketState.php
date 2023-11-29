@@ -18,9 +18,6 @@ class TicketState
 {
     public function __invoke(Request $request, Response $response): void
     {
-
-
-
         $client = (new ZammadClient())->getClient();
         $params = json_decode(file_get_contents('php://input'), true);
 
