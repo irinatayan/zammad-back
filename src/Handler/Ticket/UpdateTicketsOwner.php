@@ -37,7 +37,9 @@ class UpdateTicketsOwner
                 $statement->bindParam(':user_id', $agent);
                 $statement->bindParam(':ticket_id', $ticket);
             }
-                $statement->execute();
+
+            $statement->execute();
+
             } catch (PDOException $e) {
                 echo 'Error: ' . $e->getMessage();
             }

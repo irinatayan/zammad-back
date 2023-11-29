@@ -4,14 +4,22 @@
 
 namespace App\Handler\Ticket;
 
+use App\Database;
 use App\Request;
 use App\Response;
 use App\ZammadClient;
+use PDO;
+use PDOException;
 
 class Tickets
 {
     public function __invoke(Request $request, Response $response): void
     {
+
+        $params = json_decode(file_get_contents('php://input'), true);
+
+        $config = include_once __DIR__ . '/../../../config/database.php';
+        $connection = (new Database($config['dsn'], $config['username'], $config['password']))->getConnection();
 
         $client = (new ZammadClient())->getClient();
 
@@ -40,10 +48,26 @@ class Tickets
             $tickets = $data['assets']['Ticket'];
             $users = $data['assets']['User'];
 
+            $ticketIds = array_keys($tickets);
+            $ticketIdsString = implode(',', $ticketIds);
+            $placeholders = implode(',', array_fill(0, count($ticketIds), '?'));
+
+            $sql = "SELECT tu.ticket_id, u.username
+                FROM ticket_user tu
+                JOIN user u ON tu.user_id = u.id
+                WHERE tu.ticket_id IN ($ticketIdsString)";
+
+            $ticketIdsWithUsername = $connection->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+            $indexedTicketIdsWithUsername = [];
+            foreach ($ticketIdsWithUsername as $row) {
+                $indexedTicketIdsWithUsername[$row['ticket_id']] = $row;
+            }
+
+
             $tickets_with_users_info = [];
             foreach ($tickets as $key => $ticket) {
 
-                $ticket['owner'] = $users[$ticket['owner_id']];
+                $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']];
                 $ticket['customer'] = $users[$ticket['customer_id']];
                 $tickets_with_users_info[] = $ticket;
             }
