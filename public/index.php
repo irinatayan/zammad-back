@@ -9,6 +9,7 @@ use App\Handler\Ticket\StatesPrioritiesAgents;
 use App\Handler\Ticket\Ticket;
 use App\Handler\Ticket\Tickets;
 use App\Handler\Ticket\UpdateTicketsOwner;
+use App\Handler\Ticket\UpdateTicketsPriority;
 use App\Handler\Ticket\TicketSearch;
 use App\Handler\Ticket\Update as TicketUpdate;
 use App\Handler\Ticket\TicketState;
@@ -61,6 +62,8 @@ $router->options('/backend/ticket/bulk-update-info', callback: OptionsHeaders::c
 $router->post('/backend/tickets/update/owner', callback: UpdateTicketsOwner::class);
 $router->options('/backend/tickets/update/owner', callback: OptionsHeaders::class);
 
+$router->post('/backend/tickets/update/priority', callback: UpdateTicketsPriority::class);
+$router->options('/backend/tickets/update/priority', callback: OptionsHeaders::class);
 
 
 $router->run($_SERVER);

@@ -20,7 +20,6 @@ class TicketPriority
         $params = json_decode(file_get_contents('php://input'), true);
 
         $ticket = $client->resource(ResourceType::TICKET)->get($params['ticketId']);
-        $r = $params['priorityId'];
         $ticket->setValue( 'priority_id', $params['priorityId'] );
         $ticket->save();
 
