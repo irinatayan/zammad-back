@@ -57,7 +57,24 @@ class TicketUser {
             die("Error: " . $e->getMessage());
         }
     }
-    public function createOrUpdate($ticketId, $agentId) {
 
+    public function getTicketsUsername($ticketsIds): array
+    {
+        if (empty($ticketsIds)) {
+            return [];
+        };
+        $ticketIdsString = implode(',', $ticketsIds);
+
+        $sql = "SELECT tu.ticket_id, u.username
+                FROM ticket_user tu
+                JOIN user u ON tu.user_id = u.id
+                WHERE tu.ticket_id IN ($ticketIdsString)";
+
+        $ticketIdsWithUsername = $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $indexedTicketIdsWithUsername = [];
+        foreach ($ticketIdsWithUsername as $row) {
+            $indexedTicketIdsWithUsername[$row['ticket_id']] = $row;
+        }
+        return $indexedTicketIdsWithUsername;
     }
 }
