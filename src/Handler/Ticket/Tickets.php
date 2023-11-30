@@ -11,6 +11,7 @@ use App\Response;
 use App\ZammadClient;
 use PDO;
 use PDOException;
+use ZammadAPIClient\ResourceType;
 
 class Tickets
 {
@@ -55,11 +56,23 @@ class Tickets
             $userTicket = new TicketUser($connection);
             $indexedTicketIdsWithUsername = $userTicket->getTicketsUsername($ticketIds);
 
+
+            $states = $client->resource(ResourceType::TICKET_STATE)->all();
+            $statesArr = [];
+            foreach ($states as $state) {
+                $stateValues = $state->getValues();
+                ['id' => $id, 'name' => $name] = $stateValues;
+
+                if ($name === "closed" || $name === "open" || $name === "pending reminder") {
+                    $statesArr[$id] = $name;
+                }
+            }
+
             $tickets_with_users_info = [];
             foreach ($tickets as $key => $ticket) {
-
                 $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']];
                 $ticket['customer'] = $users[$ticket['customer_id']];
+                $ticket['state'] = $statesArr[$ticket['state_id']];
                 $tickets_with_users_info[] = $ticket;
             }
             (new Response())->success($tickets_with_users_info)->send();

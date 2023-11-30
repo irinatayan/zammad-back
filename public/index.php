@@ -10,6 +10,7 @@ use App\Handler\Ticket\Ticket;
 use App\Handler\Ticket\Tickets;
 use App\Handler\Ticket\UpdateTicketsOwner;
 use App\Handler\Ticket\UpdateTicketsPriority;
+use App\Handler\Ticket\UpdateTicketsState;
 use App\Handler\Ticket\TicketSearch;
 use App\Handler\Ticket\Update as TicketUpdate;
 use App\Handler\Ticket\TicketState;
@@ -65,5 +66,7 @@ $router->options('/backend/tickets/update/owner', callback: OptionsHeaders::clas
 $router->post('/backend/tickets/update/priority', callback: UpdateTicketsPriority::class);
 $router->options('/backend/tickets/update/priority', callback: OptionsHeaders::class);
 
+$router->post('/backend/tickets/update/state', callback: UpdateTicketsState::class);
+$router->options('/backend/tickets/update/state', callback: OptionsHeaders::class);
 
 $router->run($_SERVER);
