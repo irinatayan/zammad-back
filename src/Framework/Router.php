@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Framework;
+namespace Framework;
 
-use App\Framework\Exceptions\ContainerException;
+use Framework\Exceptions\ContainerException;
 
 class Router
 {

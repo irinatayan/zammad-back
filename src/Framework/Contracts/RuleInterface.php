@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Framework\Contracts;
+namespace Framework\Contracts;
 
 interface RuleInterface
 {

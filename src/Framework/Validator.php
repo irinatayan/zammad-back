@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Framework;
+namespace Framework;
 
-use App\Framework\Contracts\RuleInterface;
-use App\Framework\Exceptions\ValidationException;
+use Framework\Contracts\RuleInterface;
+use Framework\Exceptions\ValidationException;
 
 class Validator
 {

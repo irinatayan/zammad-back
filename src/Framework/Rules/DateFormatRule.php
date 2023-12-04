@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Framework\Rules;
+namespace Framework\Rules;
 
-use App\Framework\Contracts\RuleInterface;
+use Framework\Contracts\RuleInterface;
 
 class DateFormatRule implements RuleInterface
 {

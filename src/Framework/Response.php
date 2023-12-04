@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Framework;
+namespace Framework;
+
 class Response
 {
     private int $statusCode;
