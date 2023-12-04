@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Framework\Exceptions;
+namespace Framework\Exceptions;
 
 class ContainerException extends \Exception
 {

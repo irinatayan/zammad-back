@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Framework\Rules;
+namespace Framework\Rules;
 
-use App\Framework\Contracts\RuleInterface;
+use Framework\Contracts\RuleInterface;
 
 class RequiredRule implements RuleInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Framework\Rules;
+namespace Framework\Rules;
 
-use App\Framework\Contracts\RuleInterface;
+use Framework\Contracts\RuleInterface;
+use Framework\Exceptions\ValidationException;
 use InvalidArgumentException;
-
 class LengthMaxRule implements RuleInterface
 {
     public function validate(array $data, string $field, array $params): bool

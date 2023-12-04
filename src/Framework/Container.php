@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Framework;
+namespace Framework;
 
-use App\Framework\Exceptions\ContainerException;
-use ReflectionClass;
-use ReflectionNamedType;
+use ReflectionClass, ReflectionNamedType;
+use Framework\Exceptions\ContainerException;
 
 class Container
 {
