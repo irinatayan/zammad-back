@@ -3,8 +3,13 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
-        }
+            "App\\": "src/App",
+            "Framework\\": "src/Framework"
+        },
+        "files": [
+            "src/App/Config/Routes.php",
+            "src/App/Config/Middleware.php"
+        ]
     },
     "authors": [
         {
@@ -15,6 +20,7 @@
     "require": {
         "ext-PDO": "^8.2",
         "zammad/zammad-api-client-php": "2.0.*",
-        "nesbot/carbon": "^2.71"
+        "nesbot/carbon": "^2.71",
+        "vlucas/phpdotenv": "^5.6"
     }
 }
