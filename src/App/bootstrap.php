@@ -10,6 +10,8 @@ use Dotenv\Dotenv;
 
 use function App\Config\{registerRoutes, registerMiddleware};
 
+header("Content-type: application/json; charset=UTF-8");
+
 $dotenv = Dotenv::createImmutable(Paths::ROOT);
 $dotenv->load();
 

@@ -7,16 +7,18 @@ namespace App\Services;
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
 
-class UserService
+readonly class UserService
 {
-    public function __construct(private Database $db)
+    public function __construct(
+        private readonly Database $db,
+        private readonly JWTCodecService $JWTCodec)
     {
     }
 
     public function isEmailTaken(string $email)
     {
         $emailCount = $this->db->query(
-            "select count(*) from users where email=:email",
+            "select count(*) from user where email=:email",
             ["email" => $email]
         )->count();
 
@@ -32,7 +34,7 @@ class UserService
         $password = password_hash($formData['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 
         $this->db->query(
-            "insert into users (email, password, age, country, social_media_url)
+            "insert into user (email, password, age, country, social_media_url)
               values (:email, :password, :age, :country, :social_media_url)",
             [
                 "email" => $formData['email'],
@@ -50,7 +52,7 @@ class UserService
     public function login(array $formData): void
     {
         $user = $this->db->query(
-            "select * from users where email=:email",
+            "select * from user where email=:email",
             [
                 "email" => $formData['email']
             ]
@@ -62,9 +64,27 @@ class UserService
             throw new ValidationException(['password' => ['Invalid credentials']]);
         }
 
-        session_regenerate_id();
+        $payload = [
+            "sub" => $user['id'],
+            "name" => $user["username"],
+            "exp" => time() + 432000
+        ];
 
-        $_SESSION['user'] = $user['id'];
+        $access_token = $this->JWTCodec->encode($payload);
+
+        $refresh_token_expiry = time() + 432000; //5 days
+
+        $refresh_token = $this->JWTCodec->encode([
+            "sub" => $user['id'],
+            "exp" => $refresh_token_expiry
+        ]);
+
+
+        echo json_encode([
+            "access_token" => $access_token,
+            "refresh_token" => $refresh_token
+        ]);
+
     }
 
     public function logout():void
