@@ -5,22 +5,14 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use Framework\Response;
-use Framework\TemplateEngine;
-use App\Services\{ValidatorService, UserService};
+use App\Services\{JWTCodecService, ValidatorService, UserService};
 
-class AuthController
+readonly class AuthController
 {
-
     public function __construct(
-        private readonly TemplateEngine $view,
-        private readonly ValidatorService $validatorService,
+        private ValidatorService $validatorService,
         private UserService $userService
     ) {
-    }
-
-    public function registerView(): void
-    {
-        echo $this->view->render("register.php", ['title' => 'Register']);
     }
 
     public function register(): void
@@ -33,16 +25,12 @@ class AuthController
 //        redirectTo('/');
     }
 
-    public function loginView(): void
-    {
-        echo $this->view->render("login.php", ['title' => 'Login']);
-    }
-
     public function login(): void
     {
-        $this->validatorService->validateLogin($_POST);
-        $this->userService->login($_POST);
-        redirectTo('/');
+        $data = json_decode(file_get_contents("php://input"), true);
+        $this->validatorService->validateLogin($data);
+        $this->userService->login($data);
+
     }
 
     public function logout(): void
