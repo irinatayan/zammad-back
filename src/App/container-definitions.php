@@ -3,7 +3,14 @@
 declare(strict_types=1);
 
 use Framework\{TemplateEngine, Database, Container};
-use App\Services\{ValidatorService, UserService, TransactionService, JWTCodecService};
+use App\Services\{AuthService,
+    ValidatorService,
+    UserService,
+    TransactionService,
+    JWTCodecService,
+    TicketService,
+};
+use ZammadAPIClient\Client;
 use App\Config\Paths;
 
 return [
@@ -20,13 +27,31 @@ return [
         $_ENV['DB_USER'],
         $_ENV['DB_PASS']
     ),
+
     UserService::class => function (Container $container) {
         $db = $container->get(Database::class);
-        $JWTCodec = $container->get(JWTCodecService::class );
+        $JWTCodec = $container->get(JWTCodecService::class);
         return new UserService($db, $JWTCodec);
     },
+    TicketService::class => function (Container $container) {
+        $db = $container->get(Database::class);
+        $client = $container->get(Client::class);
+        return new TicketService($db, $client);
+    },
+
     TransactionService::class => function (Container $container) {
         $db = $container->get(Database::class);
         return new TransactionService($db);
+    },
+
+    Client::class => fn() => new Client([
+        'url' => $_ENV['ZAMMAD_URL'],
+        'username' => $_ENV['ZAMMAD_USERNAME'],
+        'password' => $_ENV['ZAMMAD_PASSWORD'],
+    ]),
+
+    AuthService::class => function (Container $container) {
+        $JWTCodec = $container->get(JWTCodecService::class);
+        return new AuthService($JWTCodec);
     },
 ];
