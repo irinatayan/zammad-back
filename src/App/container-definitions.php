@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use Framework\{TemplateEngine, Database, Container};
 use App\Services\{AuthService,
+    RefreshTokenService,
     ValidatorService,
     UserService,
     TransactionService,
     JWTCodecService,
-    TicketService,
-};
+    TicketService};
 use ZammadAPIClient\Client;
 use App\Config\Paths;
 
@@ -31,7 +31,8 @@ return [
     UserService::class => function (Container $container) {
         $db = $container->get(Database::class);
         $JWTCodec = $container->get(JWTCodecService::class);
-        return new UserService($db, $JWTCodec);
+        $refreshTokenService = $container->get(RefreshTokenService::class);
+        return new UserService($db, $JWTCodec, $refreshTokenService);
     },
     TicketService::class => function (Container $container) {
         $db = $container->get(Database::class);
@@ -53,5 +54,10 @@ return [
     AuthService::class => function (Container $container) {
         $JWTCodec = $container->get(JWTCodecService::class);
         return new AuthService($JWTCodec);
+    },
+
+    RefreshTokenService::class => function (Container $container) {
+        $db = $container->get(Database::class);
+        return new RefreshTokenService($db, $_ENV['SECRET_KEY']);
     },
 ];

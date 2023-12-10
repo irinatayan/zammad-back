@@ -38,4 +38,10 @@ readonly class AuthController
         $this->userService->logout();
         redirectTo('/login');
     }
+
+    public function refreshToken(): void
+    {
+        $data = (array) json_decode(file_get_contents("php://input"), true);
+        $this->userService->refreshToken($data);
+    }
 }

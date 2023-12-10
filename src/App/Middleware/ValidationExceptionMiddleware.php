@@ -21,11 +21,11 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             $formattedFormData = array_diff_key(
                 $oldFormData, array_flip($excludedFields)
             );
-            $_SESSION['errors'] = $e->errors;
-            $_SESSION['oldFormData'] = $formattedFormData;
 
-            $referer = $_SERVER['HTTP_REFERER'];
-            redirectTo($referer);
+            http_response_code(500);
+            echo json_encode([
+                "message" => "invalid data"
+            ]);
         }
     }
 }
