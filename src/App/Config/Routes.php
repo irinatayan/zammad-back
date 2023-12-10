@@ -20,7 +20,7 @@ function registerRoutes(App $app): void
     $app->post('/backend/refresh', [AuthController::class, 'refreshToken']);
 
     $app->post('/register', [AuthController::class, 'register']);
-    $app->get('/backend/ticket/search', [TicketController::class, 'search']);
+    $app->get('/backend/ticket/search', [TicketController::class, 'search'])->add(AuthRequiredMiddleware::class);
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/transaction', [TransactionController::class, 'createView'])->add(AuthRequiredMiddleware::class);
@@ -30,5 +30,5 @@ function registerRoutes(App $app): void
     $app->delete('/transaction/{transaction}', [TransactionController::class, 'delete'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
-//    $app->setOptionsHandler([OptionsController::class, 'sendAllowOrigin']);
+    $app->setOptionsHandler([OptionsController::class, 'sendAllowOrigin']);
 }
