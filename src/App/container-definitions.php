@@ -37,7 +37,8 @@ return [
     TicketService::class => function (Container $container) {
         $db = $container->get(Database::class);
         $client = $container->get(Client::class);
-        return new TicketService($db, $client);
+        $userService = $container->get(UserService::class);
+        return new TicketService($db, $client, $userService);
     },
 
     TransactionService::class => function (Container $container) {

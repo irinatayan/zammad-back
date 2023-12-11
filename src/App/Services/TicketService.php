@@ -1,16 +1,19 @@
 <?php
 
 namespace App\Services;
-
 use App\Model\TicketUser;
-use App\Response;
+
 use Framework\Database;
 use ZammadAPIClient\Client;
 use ZammadAPIClient\ResourceType;
 
 class TicketService
 {
-    public function __construct(private Database $db, private Client $client)
+    public function __construct(
+        private Database $db,
+        private readonly Client $client,
+        private readonly UserService $userService
+    )
     {
 
     }
@@ -40,7 +43,10 @@ class TicketService
 
         echo json_encode([
             'message' => 'search',
-            'data' => $arr
+            'data' => [
+                "tickets" => $arr,
+                "user" => $this->userService->getUser()
+            ]
         ]);
     }
 }
