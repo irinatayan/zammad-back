@@ -10,12 +10,23 @@ use Framework\Exceptions\ValidationException;
 
 readonly class UserService
 {
+    private ?array $user;
     public function __construct(
         private readonly Database $db,
         private readonly JWTCodecService $JWTCodec,
         private readonly RefreshTokenService $refreshTokenService
     )
     {
+    }
+
+    public function setUser (?array $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getUser (): ?array
+    {
+        return $this->user;
     }
 
     public function getById(int $id)
