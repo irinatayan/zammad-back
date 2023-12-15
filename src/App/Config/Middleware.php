@@ -23,5 +23,5 @@ function registerMiddleware(App $app): void
 //    $app->addMiddleware(AuthRequiredMiddleware::class);
 //    $app->addMiddleware(FlashMiddleware::class);
 //    $app->addMiddleware(SessionMiddleware::class );
-    $app->addMiddleware(UserMiddleware::class );
+//    $app->addMiddleware(UserMiddleware::class );
 }

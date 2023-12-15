@@ -54,7 +54,8 @@ return [
 
     AuthService::class => function (Container $container) {
         $JWTCodec = $container->get(JWTCodecService::class);
-        return new AuthService($JWTCodec);
+        $userService = $container->get(UserService::class);
+        return new AuthService($JWTCodec, $userService);
     },
 
     RefreshTokenService::class => function (Container $container) {
