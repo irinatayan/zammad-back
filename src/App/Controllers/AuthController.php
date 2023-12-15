@@ -44,4 +44,13 @@ readonly class AuthController
         $data = (array) json_decode(file_get_contents("php://input"), true);
         $this->userService->refreshToken($data);
     }
+
+    public function currentUser(): void
+    {
+        echo json_encode([
+            'data' => [
+                "user" => $this->userService->getUser()
+            ]
+        ]);
+    }
 }

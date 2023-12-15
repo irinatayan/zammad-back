@@ -18,6 +18,7 @@ function registerRoutes(App $app): void
 {
     $app->post('/backend/login', [AuthController::class, 'login']);
     $app->post('/backend/refresh', [AuthController::class, 'refreshToken']);
+    $app->post('/backend/me', [AuthController::class, 'currentUser']);
 
     $app->post('/register', [AuthController::class, 'register']);
     $app->get('/backend/ticket/search', [TicketController::class, 'search'])->add(AuthRequiredMiddleware::class);

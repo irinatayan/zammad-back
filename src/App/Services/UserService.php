@@ -8,7 +8,7 @@ use Exception;
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
 
-readonly class UserService
+class UserService
 {
     private ?array $user;
     public function __construct(
@@ -17,6 +17,7 @@ readonly class UserService
         private readonly RefreshTokenService $refreshTokenService
     )
     {
+        $this->user = null;
     }
 
     public function setUser (?array $user): void
@@ -113,7 +114,8 @@ readonly class UserService
 
         echo json_encode([
             "access_token" => $access_token,
-            "refresh_token" => $refresh_token
+            "refresh_token" => $refresh_token,
+            "user" => $user
         ]);
 
     }
@@ -181,7 +183,8 @@ readonly class UserService
 
         echo json_encode([
             "access_token" => $access_token,
-            "refresh_token" => $refresh_token
+            "refresh_token" => $refresh_token,
+            "user" => $user
         ]);
 
         $this->refreshTokenService->delete($formData['token']);
