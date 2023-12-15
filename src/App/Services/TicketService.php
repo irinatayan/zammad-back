@@ -41,6 +41,8 @@ class TicketService
 
 //        (new Response())->success($arr)->send();
 
+        $user = $this->userService->getUser();
+
         echo json_encode([
             'message' => 'search',
             'data' => [

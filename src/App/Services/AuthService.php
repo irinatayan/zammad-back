@@ -7,18 +7,11 @@ use Exception;
 
 class AuthService
 {
-
-    private int $user_id;
-
     public function __construct(
-        private JWTCodecService $codec
+        private JWTCodecService $codec,
+        private UserService $userService
     )
     {
-    }
-
-    public function getUserID(): int
-    {
-        return $this->user_id;
     }
 
     public function authenticateAccessToken(): bool
@@ -32,7 +25,7 @@ class AuthService
         try {
             $data = $this->codec->decode($matches[1]);
         } catch (InvalidSignatureException) {
-            http_response_code(401);
+            http_response_code(400);
             echo json_encode(["message" => 'invalid signature ']);
             return false;
         } catch (TokenExpiredException) {
@@ -45,7 +38,7 @@ class AuthService
             return false;
         }
 
-        $this->user_id = $data['sub'];
+        $this->userService->setUser($this->userService->getById($data['sub']));
         return true;
     }
 }
