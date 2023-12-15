@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Exceptions\TokenExpiredException;
 use App\Services\JWTCodecService;
 use App\Services\UserService;
 use Framework\Contracts\MiddlewareInterface;
 
-class UserMiddleware implements MiddlewareInterface
+readonly class UserMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly JWTCodecService $codec, private readonly UserService $userService)
+    public function __construct(private JWTCodecService $codec, private UserService $userService)
     {
     }
     public function process(callable $next)
@@ -22,8 +23,13 @@ class UserMiddleware implements MiddlewareInterface
                 $user = $this->userService->getById($user_id);
                 $this->userService->setUser($user);
             }
-        } catch (\Exception) {
+        }
+        catch (TokenExpiredException ) {
+//            http_response_code(401);
+//            echo json_encode(["message" => "token has expired"]);
 
+        } catch (\Exception) {
+            $this->userService->setUser(null);
         }
         $next();
     }
