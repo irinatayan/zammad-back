@@ -102,4 +102,61 @@ class TicketService
         }
         return $indexedTicketIdsWithUsername;
     }
+
+    public function getTicket($id): array
+    {
+        $ticket = $this->client->resource(ResourceType::TICKET)->get($id);
+        $ticket = !empty($ticket->getValues()) ? $ticket->getValues() : null;
+        $articles = $this->getTicketArticles($id);
+        $agents = $this->userService->getUsersByRole('user');
+        $owner = $this->getOwnerIdByTicketId($id);
+        $states = $this->filterStates();
+        return [
+            "ticket" => $ticket,
+            "articles" => $articles,
+            "agents" => $agents,
+            "owner" => $owner,
+            "states" => $states
+        ];;
+    }
+
+    private function getTicketArticles($ticketId): array
+    {
+        $articles = $this->client->resource(ResourceType::TICKET_ARTICLE)->getForTicket($ticketId);
+
+        $articlesArr = [];
+
+        foreach ($articles as $article) {
+            $articlesArr[] = $article->getValues();
+        }
+        return $articlesArr;
+    }
+
+    public function getOwnerIdByTicketId($ticketId): ?array
+    {
+            $sql = "SELECT user_id FROM ticket_user WHERE ticket_id = :ticket_id";
+            $owner = $this->db->query($sql,             [
+                "ticket_id" => $ticketId,
+            ])->find();
+            return $owner ?: null;
+    }
+
+    private function filterStates(): array
+    {
+        $states = $this->client->resource(ResourceType::TICKET_STATE)->all();
+        $allowedStates = ["closed", "open", "pending reminder"];
+        $statesArr = [];
+
+        foreach ($states as $state) {
+            $stateValues = $state->getValues();
+            ['id' => $id, 'name' => $name] = $stateValues;
+
+            if (in_array($name, $allowedStates)) {
+                $statesArr[] = $stateValues;
+            }
+        }
+
+        return $statesArr;
+    }
+
 }
