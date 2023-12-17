@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use Framework\TemplateEngine;
-use App\Services\{TicketService, ValidatorService, TransactionService};
+use App\Services\{TicketService, UserService};
 
 class TicketController
 {
     public function __construct(
         private TicketService $ticketService,
+        private readonly UserService $userService
     ) {
     }
 
-    public function search()
+    public function search(): void
     {
-        $this->ticketService->search();
+        $searchQuery = $_GET['query'] ?? '';
+        $tickets = $this->ticketService->search($searchQuery);
+        echo json_encode([
+            'message' => 'search',
+            'data' => [
+                "tickets" => $tickets,
+                "user" => $this->userService->getUser()
+            ]
+        ]);
     }
 
     public function getAll()

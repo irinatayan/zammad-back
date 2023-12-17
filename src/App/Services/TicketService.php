@@ -18,39 +18,24 @@ class TicketService
     {
 
     }
-    public function search()
+    public function search(string $query): array
     {
-        $searchQuery = $_GET['query'] ?? '';
         // $tickets = $client->resource( ResourceType::TICKET )->search($searchQuery.' AND article.attachment.content_type: PDF');
-        $tickets = $this->client->resource( ResourceType::TICKET )->search($searchQuery);
-
-
-        $arr = [];
+        $tickets = $this->client->resource( ResourceType::TICKET )->search($query);
+        $valuedTickets = [];
         $ticketIndexes = [];
-        foreach ($tickets as $key => $ticket) {
+        foreach ($tickets as $ticket) {
             $ticketValues = $ticket->getValues();
             $ticketIndexes[] = $ticketValues['id'];
-            $arr[] = $ticketValues;
+            $valuedTickets[] = $ticketValues;
         }
 
-//        $userTicket = new TicketUser($connection);
-//        $indexedTicketIdsWithUsername = $userTicket->getTicketsUsername($ticketIndexes);
-//
-//        foreach ($arr as $key => &$ticket) {
-//            $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']]['username'];
-//        }
+        $indexedTicketIdsWithUsername = $this->getTicketsUsername($ticketIndexes);
 
-//        (new Response())->success($arr)->send();
-
-        $user = $this->userService->getUser();
-
-        echo json_encode([
-            'message' => 'search',
-            'data' => [
-                "tickets" => $arr,
-                "user" => $this->userService->getUser()
-            ]
-        ]);
+        foreach ($valuedTickets as $key => &$ticket) {
+            $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']]['username'];
+        }
+        return $valuedTickets;
     }
 
     public function getAll(array $query)
