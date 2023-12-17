@@ -192,4 +192,14 @@ class UserService
 
 
     }
+
+    public function getUsersByRole($role): array
+    {
+        $sql = "SELECT * FROM user WHERE role = :role";
+        return $this->db->query($sql,
+            [
+                "role" => $role,
+            ]
+        )->findAll();
+    }
 }

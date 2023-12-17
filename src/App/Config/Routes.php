@@ -22,6 +22,7 @@ function registerRoutes(App $app): void
 
     $app->get('/backend/ticket/search', [TicketController::class, 'search'])->add(AuthRequiredMiddleware::class);
     $app->get('/backend/tickets', [TicketController::class, 'getAll'])->add(AuthRequiredMiddleware::class);
+    $app->get('/backend/ticket', [TicketController::class, 'getTicket'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
 

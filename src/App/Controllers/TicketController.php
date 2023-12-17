@@ -49,4 +49,14 @@ class TicketController
             'data' => $tickets
         ]);
     }
+
+    public function getTicket(): void
+    {
+        $id = $_GET['id'] ?? '';
+
+        $ticket = $this->ticketService->getTicket($id);
+        echo json_encode([
+            'data' => $ticket
+        ]);
+    }
 }
