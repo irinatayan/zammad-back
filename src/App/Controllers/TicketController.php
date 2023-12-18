@@ -100,4 +100,12 @@ readonly class TicketController
         $agent = $params['agentId'];
         $this->ticketService->updateTicketsOwner($tickets, $agent);
     }
+
+    public function updateTicketsPriority(): void
+    {
+        $params = json_decode(file_get_contents('php://input'), true);
+        $tickets = $params['tickets'];
+        $priority = $params['priorityId'];
+        $this->ticketService->updateTicketsPriority($tickets, $priority);
+    }
 }
