@@ -242,4 +242,38 @@ class TicketService
 
         return $data;
     }
+
+    public function updateTicketsOwner($tickets, $owner)
+    {
+        foreach ($tickets as $ticket) {
+            $ticketRecord = $this->getTicketById($ticket);
+
+                if ($ticketRecord) {
+                    $sql = 'UPDATE ticket_user SET user_id = :user_id WHERE ticket_id = :ticket_id';
+                    $this->db->query($sql, [
+                        'ticket_id' => $ticket,
+                        'user_id' => $owner
+                    ]);
+                }
+
+                else {
+                    $sql = 'INSERT INTO ticket_user (user_id, ticket_id) VALUES (:user_id, :ticket_id)';
+                    $this->db->query($sql, [
+                        'ticket_id' => $ticket,
+                        'user_id' => $owner
+                    ]);
+                }
+
+        }
+    }
+
+
+    public function getTicketById($ticketId)
+    {
+            $sql = "SELECT * FROM ticket_user WHERE ticket_id = :ticket_id";
+            $ticket = $this->db->query($sql, [
+                'ticket_id' => $ticketId
+            ])->find();
+            return $ticket ?: null;
+    }
 }

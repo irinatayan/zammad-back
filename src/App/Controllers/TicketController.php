@@ -92,4 +92,12 @@ readonly class TicketController
             'data' => $info
         ]);
     }
+
+    public function updateTicketsOwner(): void
+    {
+        $params = json_decode(file_get_contents('php://input'), true);
+        $tickets = $params['tickets'];
+        $agent = $params['agentId'];
+        $this->ticketService->updateTicketsOwner($tickets, $agent);
+    }
 }
