@@ -159,7 +159,7 @@ class TicketService
         return $statesArr;
     }
 
-    function updateTicketOwner($ticketId, $ownerId)
+    public function updateTicketOwner($ticketId, $ownerId): void
     {
         $owner = $this->getOwnerIdByTicketId($ticketId);
 
@@ -180,6 +180,13 @@ class TicketService
 
             ]);
         }
+    }
+
+    public function updateTicketPriority($ticketId, $priorityId): void
+    {
+        $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+        $ticket->setValue( 'priority_id', $priorityId );
+        $ticket->save();
     }
 
 }
