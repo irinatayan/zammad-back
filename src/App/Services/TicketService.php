@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Model\TicketUser;
 
 use App\Response;
+use Error;
 use Framework\Database;
 use ZammadAPIClient\Client;
 use ZammadAPIClient\ResourceType;
@@ -165,26 +166,25 @@ class TicketService
 
         if ($owner) {
             $sql = 'UPDATE ticket_user SET user_id = :user_id WHERE ticket_id = :ticket_id';
-            $this->db->query($sql, [
-                'ticket_id' => $ticketId,
-                'user_id' => $ownerId
-
-            ]);
         }
 
         else {
             $sql = 'INSERT INTO ticket_user (user_id, ticket_id) VALUES (:user_id, :ticket_id)';
-            $this->db->query($sql, [
-                'ticket_id' => $ticketId,
-                'user_id' => $ownerId
-
-            ]);
         }
+        $this->db->query($sql, [
+            'ticket_id' => $ticketId,
+            'user_id' => $ownerId
+
+        ]);
     }
 
     public function updateTicketPriority($ticketId, $priorityId): void
     {
         $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+
+        if ( $ticket->hasError() ) {
+            throw new Error($ticket->getError());
+        }
         $ticket->setValue( 'priority_id', $priorityId );
         $ticket->save();
     }

@@ -65,10 +65,6 @@ readonly class TicketController
     {
         $params = json_decode(file_get_contents('php://input'), true);
         $this->ticketService->updateTicketOwner($params["ticketId"], $params["agentId"]);
-
-        echo json_encode([
-            'data' => true
-        ]);
     }
 
     public function updateTicketPriority(): void
