@@ -65,12 +65,7 @@ class TicketController
     public function updateTicketOwner(): void
     {
         $params = json_decode(file_get_contents('php://input'), true);
-        try {
-            $this->ticketService->updateTicketOwner($params["ticketId"], $params["agentId"]);
-        } catch(Error | Exception $err) {
-            http_response_code(500);
-            exit();
-        }
+        $this->ticketService->updateTicketOwner($params["ticketId"], $params["agentId"]);
 
         echo json_encode([
             'data' => true
