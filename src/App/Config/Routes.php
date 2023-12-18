@@ -27,6 +27,7 @@ function registerRoutes(App $app): void
     $app->post('/backend/ticket/priority', [TicketController::class, 'updateTicketPriority'])->add(AuthRequiredMiddleware::class);
     $app->post('/backend/ticket/state', [TicketController::class, 'updateTicketState'])->add(AuthRequiredMiddleware::class);
     $app->get('/backend/tickets/bulk-update-info', [TicketController::class, 'statesPrioritiesAgents'])->add(AuthRequiredMiddleware::class);
+    $app->post('/backend/tickets/owner', [TicketController::class, 'updateTicketsOwner'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
 
