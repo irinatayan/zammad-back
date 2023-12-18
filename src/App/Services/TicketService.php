@@ -159,4 +159,27 @@ class TicketService
         return $statesArr;
     }
 
+    function updateTicketOwner($ticketId, $ownerId)
+    {
+        $owner = $this->getOwnerIdByTicketId($ticketId);
+
+        if ($owner) {
+            $sql = 'UPDATE ticket_user SET user_id = :user_id WHERE ticket_id = :ticket_id';
+            $this->db->query($sql, [
+                'ticket_id' => $ticketId,
+                'user_id' => $ownerId
+
+            ]);
+        }
+
+        else {
+            $sql = 'INSERT INTO ticket_user (user_id, ticket_id) VALUES (:user_id, :ticket_id)';
+            $this->db->query($sql, [
+                'ticket_id' => $ticketId,
+                'user_id' => $ownerId
+
+            ]);
+        }
+    }
+
 }

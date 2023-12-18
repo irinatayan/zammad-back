@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use Error;
+use Exception;
 use App\Services\{TicketService, UserService};
 
 class TicketController
@@ -57,6 +59,21 @@ class TicketController
         $ticket = $this->ticketService->getTicket($id);
         echo json_encode([
             'data' => $ticket
+        ]);
+    }
+
+    public function updateTicketOwner(): void
+    {
+        $params = json_decode(file_get_contents('php://input'), true);
+        try {
+            $this->ticketService->updateTicketOwner($params["ticketId"], $params["agentId"]);
+        } catch(Error | Exception $err) {
+            http_response_code(500);
+            exit();
+        }
+
+        echo json_encode([
+            'data' => true
         ]);
     }
 }
