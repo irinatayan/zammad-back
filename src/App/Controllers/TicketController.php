@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use Error;
-use Exception;
 use App\Services\{TicketService, UserService};
+use ZammadAPIClient\ResourceType;
 
-class TicketController
+readonly class TicketController
 {
     public function __construct(
         private TicketService $ticketService,
-        private readonly UserService $userService
+        private UserService $userService
     ) {
     }
 
@@ -70,5 +69,12 @@ class TicketController
         echo json_encode([
             'data' => true
         ]);
+    }
+
+    public function updateTicketPriority(): void
+    {
+        $params = json_decode(file_get_contents('php://input'), true);
+        $this->ticketService->updateTicketPriority($params['ticketId'], $params['priorityId']);
+
     }
 }
