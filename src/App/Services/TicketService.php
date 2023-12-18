@@ -243,7 +243,7 @@ class TicketService
         return $data;
     }
 
-    public function updateTicketsOwner($tickets, $owner)
+    public function updateTicketsOwner($tickets, $owner): void
     {
         foreach ($tickets as $ticket) {
             $ticketRecord = $this->getTicketById($ticket);
@@ -264,6 +264,15 @@ class TicketService
                     ]);
                 }
 
+        }
+    }
+
+    public function updateTicketsPriority($tickets, $priority): void
+    {
+        foreach ($tickets as $ticketId) {
+            $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+            $ticket->setValue( 'priority_id', $priority );
+            $ticket->save();
         }
     }
 

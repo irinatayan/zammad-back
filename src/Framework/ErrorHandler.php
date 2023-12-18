@@ -24,5 +24,6 @@ class ErrorHandler
             'file' => $exception->getFile() ?? null,
             'line' => $exception->getLine() ?? null
         ]);
+        exit();
     }
 }
