@@ -4,6 +4,8 @@ namespace App\Services;
 use App\Model\TicketUser;
 
 use App\Response;
+use Carbon\Carbon;
+use DateTime;
 use Error;
 use Framework\Database;
 use ZammadAPIClient\Client;
@@ -189,4 +191,31 @@ class TicketService
         $ticket->save();
     }
 
+    public function updateTicketState($ticketId, $stateId, $stateName, $pendingTime)
+    {
+        $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+        if (is_string($pendingTime)) {
+
+            $dateTime = DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $pendingTime);
+
+            if (!($dateTime && $dateTime->format('Y-m-d\TH:i:s.v\Z') === $pendingTime)) {
+                $date = Carbon::now();
+
+                if ($pendingTime === "0.5") {
+                    $date->addHours(12);
+                }
+                else {
+                    $date->addDays((int) $pendingTime);
+                    $date->setTime(9, 0);
+                }
+
+                $pendingTime = $date->toIso8601String();
+            }
+        }
+
+        $ticket->setValue('state', $stateName);
+        $ticket->setValue('pending_time', $pendingTime);
+        $ticket->save();
+
+    }
 }
