@@ -84,4 +84,12 @@ readonly class TicketController
             $params['pendingTime'] ?? null
         );
     }
+
+    public function statesPrioritiesAgents(): void
+    {
+        $info = $this->ticketService->statesPrioritiesAgents();
+        echo json_encode([
+            'data' => $info
+        ]);
+    }
 }

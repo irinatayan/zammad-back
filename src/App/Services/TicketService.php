@@ -218,4 +218,28 @@ class TicketService
         $ticket->save();
 
     }
+
+    public function statesPrioritiesAgents() {
+
+        $states = $this->client->resource(ResourceType::TICKET_STATE)->all();
+        $priorities = $this->client->resource(ResourceType::TICKET_PRIORITY)->all();
+        $agents = $this->userService->getUsersByRole('user');
+
+        $states = $this->filterStates();
+
+        $prioritiesArr = [];
+        foreach ($priorities as $priority) {
+            $stateValues = $priority->getValues();
+            $prioritiesArr[] = $stateValues;
+        }
+
+
+        $data = [
+            "agents" => $agents,
+            "priorities" => $prioritiesArr,
+            "states" => $states
+        ];
+
+        return $data;
+    }
 }
