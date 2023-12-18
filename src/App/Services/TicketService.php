@@ -276,6 +276,37 @@ class TicketService
         }
     }
 
+    public function updateTicketsState($tickets, $stateName, $pendingTime): void
+    {
+        if (is_string($pendingTime)) {
+
+            $dateTime = DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $pendingTime);
+
+            if (!($dateTime && $dateTime->format('Y-m-d\TH:i:s.v\Z') === $pendingTime)) {
+                $date = Carbon::now();
+
+                if ($pendingTime === "0.5") {
+                    $date->addHours(12);
+                }
+                else {
+                    $date->addDays((int) $pendingTime);
+                    $date->setTime(9, 0);
+                }
+
+                $pendingTime = $date->toIso8601String();
+            }
+        }
+
+        foreach ($tickets as $ticketId) {
+            $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+            $ticket->setValue('state', $stateName);
+            $ticket->setValue('pending_time', $pendingTime);
+            $ticket->save();
+        }
+    }
+
+
+
 
     public function getTicketById($ticketId)
     {

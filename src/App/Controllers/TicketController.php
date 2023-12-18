@@ -108,4 +108,14 @@ readonly class TicketController
         $priority = $params['priorityId'];
         $this->ticketService->updateTicketsPriority($tickets, $priority);
     }
+
+    public function updateTicketsState(): void
+    {
+        $params = json_decode(file_get_contents('php://input'), true);
+
+        $tickets = $params['tickets'];
+        $stateName = $params['stateName'];
+        $pendingTime = $params['pendingTime'] ?? null;
+        $this->ticketService->updateTicketsState($tickets, $stateName, $pendingTime);
+    }
 }
