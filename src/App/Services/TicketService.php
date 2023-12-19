@@ -305,9 +305,6 @@ class TicketService
         }
     }
 
-
-
-
     public function getTicketById($ticketId)
     {
             $sql = "SELECT * FROM ticket_user WHERE ticket_id = :ticket_id";
