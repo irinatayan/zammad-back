@@ -63,21 +63,17 @@ class UserService
     public function create(array $formData): void
     {
         $password = password_hash($formData['password'], PASSWORD_BCRYPT, ['cost' => 12]);
-
+        $this->isEmailTaken($formData['email']);
         $this->db->query(
-            "insert into user (email, password, age, country, social_media_url)
-              values (:email, :password, :age, :country, :social_media_url)",
+            "insert into user (email, username, password, role)
+              values (:email, :username, :password, :role)",
             [
                 "email" => $formData['email'],
+                "username" => $formData['username'],
                 "password" => $password,
-                "age" => $formData['age'],
-                "country" => $formData['country'],
-                "social_media_url" => $formData['socialMediaURL'],
+                "role" => "user"
             ]
         );
-
-        session_regenerate_id();
-        $_SESSION['user'] = $this->db->id();
     }
 
     public function login(array $formData): void
@@ -201,5 +197,11 @@ class UserService
                 "role" => $role,
             ]
         )->findAll();
+    }
+
+    public function getAllUsers():array
+    {
+        $sql = "SELECT * FROM user";
+        return $this->db->query($sql)->findAll();
     }
 }

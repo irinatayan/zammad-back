@@ -11,7 +11,8 @@ use App\Controllers\{HomeController,
     OptionsController,
     TicketController,
     TransactionController,
-    ErrorController};
+    ErrorController,
+    UserController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 function registerRoutes(App $app): void
@@ -30,6 +31,9 @@ function registerRoutes(App $app): void
     $app->post('/backend/tickets/owner', [TicketController::class, 'updateTicketsOwner'])->add(AuthRequiredMiddleware::class);
     $app->post('/backend/tickets/priority', [TicketController::class, 'updateTicketsPriority'])->add(AuthRequiredMiddleware::class);
     $app->post('/backend/tickets/state', [TicketController::class, 'updateTicketsState'])->add(AuthRequiredMiddleware::class);
+
+    $app->get('/backend/users', [UserController::class, 'getAll'])->add(AuthRequiredMiddleware::class);
+    $app->post('/backend/users/create', [UserController::class, 'create'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
 
