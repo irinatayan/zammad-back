@@ -48,6 +48,12 @@ class TicketService
         if ($response->getStatusCode() === 200) {
             $data = json_decode($response->getBody(), JSON_OBJECT_AS_ARRAY);
 
+            if ($data['tickets_count'] === 0) {
+                return [
+                    "tickets" => [],
+                    "user" => $this->userService->getUser()
+                ];
+            }
 
             $tickets = $data['assets']['Ticket'];
             $users = $data['assets']['User'];
