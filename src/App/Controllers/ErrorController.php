@@ -12,8 +12,11 @@ class ErrorController
     {
     }
 
-    public function notFound()
+    public function notFound(): void
     {
-        echo $this->view->render("errors/not-found.php");
+        http_response_code(404);
+        echo json_encode([
+            'message' => 'not found'
+        ]);
     }
 }

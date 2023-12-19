@@ -7,6 +7,7 @@ require __DIR__ . "/../../vendor/autoload.php";
 use Framework\App;
 use App\Config\Paths;
 use Dotenv\Dotenv;
+use Framework\ErrorHandler;
 
 set_exception_handler(["Framework\\ErrorHandler", "handleException"]);
 set_error_handler(["Framework\\ErrorHandler", "handleError"]);
@@ -18,7 +19,6 @@ register_shutdown_function(function () {
     }
 });
 
-use Framework\ErrorHandler;
 
 use function App\Config\{registerRoutes, registerMiddleware};
 
