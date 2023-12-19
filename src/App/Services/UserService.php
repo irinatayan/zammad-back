@@ -30,7 +30,7 @@ class UserService
         return $this->user;
     }
 
-    public function getById(int $id)
+    public function getById($id)
     {
 
         $sql = "SELECT *
