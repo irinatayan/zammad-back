@@ -77,7 +77,7 @@ class TicketService
 
             $tickets_with_users_info = [];
             foreach ($tickets as $key => $ticket) {
-                $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']];
+                $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']] ?? null;
                 $ticket['customer'] = $users[$ticket['customer_id']];
                 $ticket['state'] = $statesArr[$ticket['state_id']];
                 $tickets_with_users_info[] = $ticket;
