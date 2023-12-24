@@ -36,7 +36,8 @@ class TicketService
         $indexedTicketIdsWithUsername = $this->getTicketsUsername($ticketIndexes);
 
         foreach ($valuedTickets as $key => &$ticket) {
-            $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']]['username'];
+//            $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']]['username'];
+            $ticket['owner'] = $indexedTicketIdsWithUsername[$ticket['id']]['username'] ?? null;
         }
         return $valuedTickets;
     }
