@@ -8,6 +8,7 @@ use Framework\App;
 use App\Controllers\{HomeController,
     AboutController,
     AuthController,
+    HookController,
     OptionsController,
     TicketController,
     TransactionController,
@@ -36,6 +37,9 @@ function registerRoutes(App $app): void
     $app->post('/backend/users/create', [UserController::class, 'create'])->add(AdminRequiredMiddleware::class)->add(AuthRequiredMiddleware::class);
 
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
+
+    $app->post('/backend/test', [HookController::class, 'sendNote']);
+
 
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
