@@ -32,8 +32,8 @@ readonly class HookController
         }
 
         $new_article = new TicketArticle();
-        $new_article->ticket_id = "4";
-        $new_article->body = "bla-bla";
+        $new_article->ticket_id = $_POST['ticketId'];
+        $new_article->body = $_POST['message'];
         $new_article->attachments = $attachments;
 
         foreach ($new_article as $var => $value) {
