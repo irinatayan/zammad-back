@@ -5,23 +5,21 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\TicketArticle;
+use App\Services\TicketService;
 use ZammadAPIClient\Client;
 use ZammadAPIClient\ResourceType;
 
 
 readonly class HookController
 {
-    public function __construct(private Client $client,)
+    public function __construct(private Client $client, private TicketService $ticketService)
     {
     }
 
     public function sendNote(): void
     {
-//        token: 2X2r4Rp51W2HYSJfDn6RFjZY45h_2F_j372fRgyMav_uUjfN7m5vlJBi3g8G_Miz
+//        token: 4wDPTuidhS8pmfXWGYWkQMlm31rB0_qInFC7tUPZAX8N08pEmoi3LFKWgz9g0Qn2
         $ticket_article = $this->client->resource(ResourceType::TICKET_ARTICLE);
-
-
-
 
         $attachments = [];
         foreach ($_FILES as $key => $file) {
@@ -53,5 +51,18 @@ readonly class HookController
         }
 
         $ticket_article->save();
+    }
+
+    public function getVoiceAttachment(): void
+    {
+        //curl -H "Authorization: Token token=4wDPTuidhS8pmfXWGYWkQMlm31rB0_qInFC7tUPZAX8N08pEmoi3LFKWgz9g0Qn2" --output fff https://test-zammad-dev.zammad.com/api/v1/ticket_attachment/4/79/68
+        $ticketId = 4;
+        $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
+        $response = $this->client->get('/api/v1/ticket_attachment/4/82/71');
+//        /api/v1/ticket_attachment/{ticket id}/{article id}/{attachment id}
+        $content = $response->getBody();
+        header("Content-type: application/json; charset=UTF-8");
+        echo $content;
+
     }
 }
