@@ -56,12 +56,15 @@ readonly class HookController
     public function getVoiceAttachment(): void
     {
         //curl -H "Authorization: Token token=4wDPTuidhS8pmfXWGYWkQMlm31rB0_qInFC7tUPZAX8N08pEmoi3LFKWgz9g0Qn2" --output fff https://test-zammad-dev.zammad.com/api/v1/ticket_attachment/4/79/68
-        $ticketId = 4;
-        $ticket = $this->client->resource(ResourceType::TICKET)->get($ticketId);
-        $response = $this->client->get('/api/v1/ticket_attachment/4/82/71');
-//        /api/v1/ticket_attachment/{ticket id}/{article id}/{attachment id}
+
+        $ticketId = $_GET['ticketId'] ?? null;
+        $articleId = $_GET['articleId'] ?? null;
+        $attachmentId = $_GET['attachmentId'] ?? null;
+        $mimeType = $_GET['mimeType'] ?? null;
+
+        $response = $this->client->get("/api/v1/ticket_attachment/{$ticketId}/$articleId/$attachmentId");
         $content = $response->getBody();
-        header("Content-type: application/json; charset=UTF-8");
+        header("Content-type: {$mimeType}");
         echo $content;
 
     }
