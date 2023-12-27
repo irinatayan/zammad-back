@@ -19,6 +19,15 @@ readonly class HookController
     public function sendNote(): void
     {
 //        token: 4wDPTuidhS8pmfXWGYWkQMlm31rB0_qInFC7tUPZAX8N08pEmoi3LFKWgz9g0Qn2
+
+        if (empty($_POST['message'])) {
+            http_response_code(405);
+            echo json_encode([
+                'message' => 'Message must have a body'
+            ]);
+            exit();
+        }
+
         $ticket_article = $this->client->resource(ResourceType::TICKET_ARTICLE);
 
         $attachments = [];
@@ -49,8 +58,8 @@ readonly class HookController
         foreach ($new_article as $var => $value) {
             $ticket_article->setValue($var, $value);
         }
-
         $ticket_article->save();
+
     }
 
     public function getVoiceAttachment(): void
