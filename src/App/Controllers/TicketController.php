@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Services\{TicketService, UserService};
+use ZammadAPIClient\Client;
 use ZammadAPIClient\ResourceType;
 
 readonly class TicketController
 {
     public function __construct(
         private TicketService $ticketService,
-        private UserService $userService
+        private UserService $userService,
+        private readonly Client $client,
     ) {
     }
 
@@ -117,5 +119,12 @@ readonly class TicketController
         $stateName = $params['stateName'];
         $pendingTime = $params['pendingTime'] ?? null;
         $this->ticketService->updateTicketsState($tickets, $stateName, $pendingTime);
+    }
+
+    public function deleteTicket(): void
+    {
+        $id = $_GET['id'] ?? '';
+        $ticket = $this->client->resource(ResourceType::TICKET)->get($id);
+        $ticket->delete();
     }
 }

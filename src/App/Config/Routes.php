@@ -40,6 +40,7 @@ function registerRoutes(App $app): void
 
     $app->post('/backend/test', [HookController::class, 'sendNote']);
     $app->get('/backend/voice', [HookController::class, 'getVoiceAttachment']);
+    $app->get('/backend/deleteTicket', [TicketController::class, 'deleteTicket']);
 
 
 
