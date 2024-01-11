@@ -71,7 +71,7 @@ class TicketService
                 $stateValues = $state->getValues();
                 ['id' => $id, 'name' => $name] = $stateValues;
 
-                if ($name === "closed" || $name === "open" || $name === "pending reminder") {
+                if ($name === "closed" || $name === "open" || $name === "pending reminder" || $name === "new") {
                     $statesArr[$id] = $name;
                 }
             }
