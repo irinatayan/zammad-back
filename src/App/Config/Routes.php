@@ -39,6 +39,7 @@ function registerRoutes(App $app): void
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
 
     $app->post('/backend/test', [HookController::class, 'sendNote']);
+    $app->post('/backend/upload', [HookController::class, 'upload']);
     $app->get('/backend/voice', [HookController::class, 'getVoiceAttachment']);
     $app->get('/backend/deleteTicket', [TicketController::class, 'deleteTicket']);
 

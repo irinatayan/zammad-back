@@ -50,6 +50,19 @@ readonly class HookController
             $attachments[] = $attachment;
         }
 
+        foreach (explode(",", $_POST['files']) as $fileName) {
+            $targetDir = __DIR__ . "/../../../uploads/";
+            $fileContent = base64_encode(file_get_contents($targetDir . $fileName));
+            $mime_type = mime_content_type($targetDir . $fileName);
+            $attachment = [
+                'filename' => $fileName,
+                'data' => $fileContent,
+                'mime-type' => $mime_type,
+                'type' => 'phone'
+            ];
+            $attachments[] = $attachment;
+        }
+
         $new_article = new TicketArticle();
         $new_article->ticket_id = $_POST['ticketId'];
         $new_article->body = $_POST['message'];
@@ -76,5 +89,57 @@ readonly class HookController
         header("Content-type: {$mimeType}");
         echo $content;
 
+    }
+
+    public function upload()
+    {
+        $targetDir = __DIR__ . "/../../../uploads/";
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        function handleFileUpload($file)
+        {
+            $targetDir = __DIR__ . "/../../../uploads/";
+
+            // Generate a unique file name to avoid overwriting existing files
+            $fileName = uniqid() . "-" . basename($file['name']);
+            $filePath = $targetDir . $fileName;
+
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($file['tmp_name'], $filePath)) {
+                return $fileName;
+            } else {
+                return false;
+            }
+        }
+
+// FilePond sends files as HTTP POST requests
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Check if a file has been sent
+            if (isset($_FILES['filepond'])) {
+                $file = $_FILES['filepond'];
+
+                // Handle the file upload
+                $result = handleFileUpload($file);
+
+                if ($result) {
+                    // Return the file name if upload was successful
+                    echo json_encode(['fileName' => $result]);
+                } else {
+                    http_response_code(500);
+                    echo "Error uploading file";
+                }
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            // Handle file deletion requests from FilePond
+            $fileName = file_get_contents('php://input');
+
+            if (unlink($targetDir . $fileName)) {
+                echo "File deleted successfully";
+            } else {
+                http_response_code(500);
+                echo "Error deleting file";
+            }
+        }
     }
 }
