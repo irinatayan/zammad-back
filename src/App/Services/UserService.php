@@ -94,7 +94,7 @@ class UserService
         $payload = [
             "sub" => $user['id'],
             "email" => $user["email"],
-            "exp" => time() + 20
+            "exp" => time() + 3600
         ];
 
         $access_token = $this->JWTCodec->encode($payload);
@@ -164,7 +164,7 @@ class UserService
         $payload = [
             "sub" => $user['id'],
             "email" => $user["email"],
-            "exp" => time() + 20
+            "exp" => time() + 3600
         ];
 
         $access_token = $this->JWTCodec->encode($payload);
