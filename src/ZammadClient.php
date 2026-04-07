@@ -12,9 +12,9 @@ class ZammadClient
     public function __construct() {
 
         $this->client = new Client([
-            'url'           => 'https://test-zammad-dev.zammad.com/', // URL to your Zammad installation
-            'username'      => 'REDACTED_EMAIL',  // Username to use for authentication
-            'password'      => 'REDACTED',// Password to use for authentication
+            'url'           => $_ENV['ZAMMAD_URL'],
+            'username'      => $_ENV['ZAMMAD_USERNAME'],
+            'password'      => $_ENV['ZAMMAD_PASSWORD'],
         ]);
     }
 

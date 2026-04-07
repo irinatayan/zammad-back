@@ -18,8 +18,6 @@ readonly class HookController
 
     public function sendNote(): void
     {
-//        token: REDACTED_TOKEN
-
         if (empty($_POST['message'])) {
             http_response_code(405);
             echo json_encode([
@@ -77,8 +75,6 @@ readonly class HookController
 
     public function getVoiceAttachment(): void
     {
-        //curl -H "Authorization: Token token=REDACTED_TOKEN" --output fff https://test-zammad-dev.zammad.com/api/v1/ticket_attachment/4/79/68
-
         $ticketId = $_GET['ticketId'] ?? null;
         $articleId = $_GET['articleId'] ?? null;
         $attachmentId = $_GET['attachmentId'] ?? null;
