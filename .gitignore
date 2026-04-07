@@ -2,6 +2,7 @@ vendor
 /config/
 /.env
 .env.*
+!.env.example
 *.env
 config.env
 uploads
